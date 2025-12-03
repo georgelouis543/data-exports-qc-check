@@ -13,7 +13,6 @@ app = FastAPI(lifespan=lifespan)
 add_middlewares(app)
 
 app.include_router(admin_routes.router)
-
 app.include_router(health_routes.router)
 app.include_router(qc_check_routes.router)
 
