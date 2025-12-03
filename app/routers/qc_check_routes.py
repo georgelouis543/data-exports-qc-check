@@ -5,6 +5,14 @@ router = APIRouter(
     tags=["qc-check"]
 )
 
+
+@router.get("")
+async def root() -> dict[str, str]:
+    """
+    Root endpoint for QC Check module.
+    """
+    return {"message": "QC Check module is operational."}
+
 @router.post("/run-check")
 async def run_qc_check(data: dict):
     """

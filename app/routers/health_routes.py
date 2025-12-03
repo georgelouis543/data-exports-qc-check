@@ -11,6 +11,11 @@ router = APIRouter(
 )
 
 
+@router.get("")
+async def root() -> dict[str, str]:
+    return {"message": "Health Check Endpoint"}
+
+
 @router.get(
     "/db-health",
     summary="DB Health Check Endpoint",
