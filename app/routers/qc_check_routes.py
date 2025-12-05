@@ -13,7 +13,7 @@ async def root() -> dict[str, str]:
     """
     return {"message": "QC Check module is operational."}
 
-@router.post("/run-check")
+@router.post("/run-metadata-validation-check")
 async def run_qc_check(data: dict):
     """
     Endpoint to run quality control checks on the provided data.
