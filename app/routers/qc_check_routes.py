@@ -1,4 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.config.database import get_session
+from app.controllers.qc_check.metadata_validation_controller import metadata_validation_handler
+from app.schemas.qc_check import QcCheckRequest
 
 router = APIRouter(
     prefix="/qc-check",
@@ -13,11 +18,17 @@ async def root() -> dict[str, str]:
     """
     return {"message": "QC Check module is operational."}
 
-@router.post("/run-metadata-validation-check")
-async def run_qc_check(data: dict):
+@router.post("/run-qc-check")
+async def run_qc_check(
+        qc_check_request: QcCheckRequest,
+        session: AsyncSession = Depends(get_session)
+):
     """
     Endpoint to run quality control checks on the provided data.
     """
     # Placeholder for QC check logic
-    qc_results = {"status": "QC check completed", "details": "All checks passed."}
-    return qc_results
+    result = await metadata_validation_handler(
+        session,
+        qc_check_request
+    )
+    return result

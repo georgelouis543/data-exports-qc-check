@@ -15,7 +15,7 @@ from sqlalchemy.orm import declarative_base
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DB_QA_URL")
+DATABASE_URL = os.getenv("DB_PROD_URL")
 
 # SQLAlchemy Base for model declarations
 Base = declarative_base()
@@ -56,11 +56,4 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
         raise HTTPException(
             status_code=503,
             detail="Database temporarily unavailable."
-        )
-
-    except Exception as e:
-        logging.error(f"Unexpected DB Error: {e}")
-        raise HTTPException(
-            status_code=500,
-            detail=f"Unexpected server error: {str(e)}"
         )
