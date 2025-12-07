@@ -12,22 +12,16 @@ async def download_file_from_s3(
         download_data: list,
 ) -> str:
     try:
-        if not download_data:
-            logging.warning("No download data provided.")
-            raise HTTPException(
-                status_code=400,
-                detail="No download data available."
-            )
+        if not download_data or not isinstance(download_data, list):
+            logging.error("Download data is not a valid list.")
+            raise Exception("Download data is not a valid list.")
 
         download_url = download_data[0].get("download_url")
         file_name = download_data[0].get("file_name")
 
         if not download_url or not file_name:
             logging.warning("Download URL (or) Filename is missing in the provided data.")
-            raise HTTPException(
-                status_code=400,
-                detail="Download URL (or) Filename is missing."
-            )
+            raise Exception("Download URL (or) Filename is missing.")
 
         logging.info("File download from S3 initiated...")
         logging.info(f"Downloading from URL: {download_url}")
@@ -50,12 +44,6 @@ async def download_file_from_s3(
         logging.info(f"File downloaded successfully and saved to {target_path}")
         return str(target_path)
 
-    except HTTPException as e:
-        raise e
-
     except Exception as e:
         logging.error(f"An error occurred while downloading the file: {e}")
-        raise HTTPException(
-            status_code=500,
-            detail="An error occurred while downloading the file."
-        )
+        raise e
