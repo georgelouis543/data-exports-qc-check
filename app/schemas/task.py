@@ -6,4 +6,4 @@ class TaskStatusResponse(BaseModel):
     state: str
     progress: str | None = None
     error: str | None = None
-    result: str | None = None
+    result: dict | None = None

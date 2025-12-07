@@ -7,6 +7,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.schemas.qc_check import QcCheckRequest
+from app.tasks.qc_tasks import metadata_validation_task
 
 
 async def metadata_validation_handler(
@@ -66,11 +67,13 @@ async def metadata_validation_handler(
             )
 
         # Add metadata validation task to the queue
-        # metadata_validation_task(qc_check_req_data)
+        task = metadata_validation_task.delay(feed_id, download_data)
+        logging.info(f"Metadata validation task queued with ID: {task.id}")
+
         return {
             "message": "Metadata validation task has been queued successfully.",
             "feed_id": feed_id,
-            "task_id": 12345  # Placeholder task ID
+            "task_id": task.id  # Placeholder task ID
         }
 
     except HTTPException as e:

@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config.database import get_session
 from app.controllers.qc_check.metadata_validation_controller import metadata_validation_handler
-from app.schemas.qc_check import QcCheckRequest
+from app.schemas.qc_check import QcCheckRequest, QcCheckResponse
 
 router = APIRouter(
     prefix="/qc-check",
@@ -18,11 +18,14 @@ async def root() -> dict[str, str]:
     """
     return {"message": "QC Check module is operational."}
 
-@router.post("/run-qc-check")
+@router.post(
+    "/run-qc-check",
+    response_model=QcCheckResponse,
+)
 async def run_qc_check(
         qc_check_request: QcCheckRequest,
         session: AsyncSession = Depends(get_session)
-):
+) -> QcCheckResponse:
     """
     Endpoint to run quality control checks on the provided data.
     """

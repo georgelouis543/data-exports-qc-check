@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from app.controllers.task.get_task_status_controller import fetch_task_status
 from app.schemas.task import TaskStatusResponse
 
 router = APIRouter(
@@ -20,9 +21,11 @@ async def root() -> dict[str, str]:
     "/status/{task_id}",
     response_model=TaskStatusResponse,
 )
-async def get_task_status(task_id: str) -> dict[str, str]:
+async def get_task_status(
+        task_id: str
+) -> TaskStatusResponse:
     """
     Get the status of a Celery task by its ID.
     """
-    # Placeholder implementation
-    return {"state": "", "progress": "queued / waiting"}
+    result = await fetch_task_status(task_id)
+    return result

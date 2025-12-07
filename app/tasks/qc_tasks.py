@@ -1,7 +1,11 @@
-import random
+from app.config.celery_config import celery_app
 
 
-async def metadata_validation_task(metadata):
+@celery_app.task(name="qc_tasks.run_check")
+def metadata_validation_task(
+        feed_id: int,
+        download_data: list
+) -> dict:
     # Download the feed file from S3
     # Extract the feed file[s]
     # Verify the metadata (file format, file type, delimiter) against the predefined schema
@@ -24,4 +28,7 @@ async def metadata_validation_task(metadata):
     # Verify exclusions list for health plans
     # Verify the nomenclature data list
     # Verify restrictions list
-    return random.randint(1, 100)
+    return {
+        "status": "completed",
+        "feed_id": feed_id
+    }

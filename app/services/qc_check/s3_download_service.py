@@ -2,7 +2,6 @@ import logging
 from pathlib import Path
 
 import httpx
-from fastapi import HTTPException
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 FEED_FILES_DIR = BASE_DIR / "feed_files"

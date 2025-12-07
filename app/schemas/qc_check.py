@@ -14,4 +14,4 @@ class QcCheckRequest(BaseModel):
 class QcCheckResponse(BaseModel):
     message: str
     feed_id: int
-    task_id: int
+    task_id: str
