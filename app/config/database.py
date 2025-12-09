@@ -51,9 +51,12 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
             logging.info("Database connection established successfully")
             yield session
 
-    except SQLAlchemyError as e:
+    except (
+            SQLAlchemyError,
+            OSError
+    ) as e:
         logging.error(f"Database connection error: {e}")
         raise HTTPException(
             status_code=503,
-            detail="Database temporarily unavailable."
+            detail=f"Database temporarily unavailable. Exited with error {str(e)}"
         )
