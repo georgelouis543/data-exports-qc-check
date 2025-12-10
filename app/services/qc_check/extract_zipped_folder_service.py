@@ -47,7 +47,7 @@ async def extract_feed_zip(
         items = os.listdir(extract_to)
         if len(items) == 1:
             child = extract_to / items[0]
-            if child.is_dir():
+            if child.is_dir(): # This is to ensure we only adjust path if it's a directory
                 extracted_path = str(child)
             else:
                 extracted_path = str(extract_to)
@@ -69,7 +69,7 @@ async def extract_feed_zip(
         if not detected_date:
             logging.info(f"[{task_id}] No date suffix found in filenames.")
 
-        return extracted_path
+        return str(extracted_path)
 
     except Exception as e:
         logging.error(f"[{task_id}] Error during extraction: {e}")
