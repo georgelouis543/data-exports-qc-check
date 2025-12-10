@@ -63,7 +63,7 @@ async def extract_feed_zip(
             match = date_pattern.search(name)
             if match:
                 detected_date = match.group(1)
-                logging.info(f"[{task_id}] Detected date {detected_date} from filename {name}")
+                logging.info(f"[{task_id}] Detected date {detected_date} in filename {name}")
                 break
 
         if not detected_date:
