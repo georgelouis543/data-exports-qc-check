@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+from typing import Any
 
 import httpx
 
@@ -8,7 +9,8 @@ FEED_FILES_DIR = BASE_DIR / "feed_files"
 FEED_FILES_DIR.mkdir(exist_ok=True)
 
 async def download_file_from_s3(
-        download_data: list,
+        download_data: list[dict[str, Any]],
+        task_id: str
 ) -> str:
     try:
         if not download_data or not isinstance(download_data, list):
@@ -22,11 +24,15 @@ async def download_file_from_s3(
             logging.warning("Download URL (or) Filename is missing in the provided data.")
             raise Exception("Download URL (or) Filename is missing.")
 
-        logging.info("File download from S3 initiated...")
+        logging.info(f"File download from S3 initiated for task ID: {task_id}")
         logging.info(f"Downloading from URL: {download_url}")
         logging.info(f"File name: {file_name}")
 
-        target_path = FEED_FILES_DIR / file_name
+        # Create folder for this task
+        task_folder = FEED_FILES_DIR / task_id
+        task_folder.mkdir(parents=True, exist_ok=True)
+
+        target_path = task_folder / file_name
 
         async with httpx.AsyncClient(timeout=None) as client:
             async with client.stream(
