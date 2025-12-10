@@ -8,7 +8,7 @@ from pathlib import Path
 from app.utils.qc_check.regex_patterns import date_regex_for_filenames
 
 
-async def extract_feed_zip(
+def extract_feed_zip(
         task_id: str,
         zip_file_path: str):
     """

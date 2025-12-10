@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 FEED_FILES_DIR = BASE_DIR / "feed_files"
 FEED_FILES_DIR.mkdir(exist_ok=True)
 
-async def download_file_from_s3(
+def download_file_from_s3(
         download_data: list[dict[str, Any]],
         task_id: str
 ) -> str:
@@ -34,8 +34,8 @@ async def download_file_from_s3(
 
         target_path = task_folder / file_name
 
-        async with httpx.AsyncClient(timeout=None) as client:
-            async with client.stream(
+        with httpx.Client(timeout=None) as client:
+            with client.stream(
                     "GET",
                     download_url
             ) as response:
@@ -43,7 +43,7 @@ async def download_file_from_s3(
 
             # Stream data in chunks to avoid memory issues with large files
             with open(target_path, "wb") as file:
-                async for chunk in response.aiter_bytes(chunk_size=1024 * 1024):
+                for chunk in response.aiter_bytes(chunk_size=1024 * 1024):
                     file.write(chunk)
 
         logging.info(f"[{task_id}] File downloaded successfully and saved to {target_path}")
