@@ -4,3 +4,4 @@ sqlalchemy[asyncio]~=2.0.44
 python-dotenv~=1.2.1
 celery[redis]~=5.6.0
 redis~=7.1.0
+psycopg[binary]~=3.3.2
