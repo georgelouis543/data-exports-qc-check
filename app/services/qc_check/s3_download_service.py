@@ -14,8 +14,8 @@ async def download_file_from_s3(
 ) -> str:
     try:
         if not download_data or not isinstance(download_data, list):
-            logging.error("Download data is not a valid list.")
-            raise Exception("Download data is not a valid list.")
+            logging.error(f"[{task_id}] Download data is not a valid list.")
+            raise Exception(f"[{task_id}] Download data is not a valid list.")
 
         download_url = download_data[0].get("download_url")
         file_name = download_data[0].get("file_name")
@@ -24,9 +24,9 @@ async def download_file_from_s3(
             logging.warning("Download URL (or) Filename is missing in the provided data.")
             raise Exception("Download URL (or) Filename is missing.")
 
-        logging.info(f"File download from S3 initiated for task ID: {task_id}")
-        logging.info(f"Downloading from URL: {download_url}")
-        logging.info(f"File name: {file_name}")
+        logging.info(f"[{task_id}] File download from S3 initiated")
+        logging.info(f"[{task_id}] Downloading from URL: {download_url}")
+        logging.info(f"[{task_id}] File name: {file_name}")
 
         # Create folder for this task
         task_folder = FEED_FILES_DIR / task_id
@@ -46,9 +46,9 @@ async def download_file_from_s3(
                 async for chunk in response.aiter_bytes(chunk_size=1024 * 1024):
                     file.write(chunk)
 
-        logging.info(f"File downloaded successfully and saved to {target_path}")
+        logging.info(f"[{task_id}] File downloaded successfully and saved to {target_path}")
         return str(target_path)
 
     except Exception as e:
-        logging.error(f"An error occurred while downloading the file: {e}")
+        logging.error(f"[{task_id}] An error occurred while downloading the file: {e}")
         raise e
