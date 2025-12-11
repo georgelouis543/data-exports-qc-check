@@ -76,7 +76,7 @@ async def verify_file_format_using_metadata(
 
         if not files_metadata_list:
             logging.error(f"[{task_id}] No metadata found for files for feed ID: {feed_id}")
-            raise AssertionError(f"No metadata found for files for feed ID: {feed_id}")
+            raise Exception(f"No metadata found for files for feed ID: {feed_id}")
 
         root_path = extracted_file_path
         delimiter_map = fetch_delimiter_map()
@@ -136,9 +136,6 @@ async def verify_file_format_using_metadata(
         return audit_step
 
     except AssertionError as e:
-        raise e
-
-    except Exception as e:
         audit_step['step_name'] = 'FILE FORMAT VERIFICATION'
         audit_step['status'] = 'ERROR'
         audit_step['details'] = {
@@ -146,3 +143,6 @@ async def verify_file_format_using_metadata(
         }
         logging.error(f"[{task_id}] File format verification error: {e}")
         return audit_step
+
+    except Exception as e:
+        raise e
