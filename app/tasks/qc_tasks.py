@@ -37,6 +37,7 @@ def metadata_validation_task(
     task_id = metadata_validation_task.request.id
     final_audit_log = []
 
+    # Download and extract the zipped folder
     downloaded_folder_path = download_file_from_s3(download_data, task_id)
     extracted_folder_path = extract_feed_zip(task_id, downloaded_folder_path)
 
@@ -48,6 +49,7 @@ def metadata_validation_task(
         )
     )
 
+    # Control file checks start here
     control_file_check = check_control_file_exists(extracted_folder_path, task_id)
     final_audit_log.append(control_file_check)
 
@@ -59,8 +61,8 @@ def metadata_validation_task(
                 task_id
             )
         )
-    control_file_path = control_file_check.get("control_file_path")
 
+    control_file_path = control_file_check.get("control_file_path")
     final_audit_log.append(
         read_filenames_from_control_file(
             control_file_path,
@@ -68,8 +70,10 @@ def metadata_validation_task(
             task_id
         )
     )
+    # Control file checks end here
 
     return {
         "status": "completed",
-        "feed_id": feed_id
+        "feed_id": feed_id,
+        "task_id": task_id
     }

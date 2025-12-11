@@ -13,7 +13,7 @@ async def fetch_task_status(task_id: str) -> dict:
         return {
             "task_id": task_id,
             "state": result.state,
-            "result": result.info
+            "result": str(result.info)
         }
     except Exception as e:
         raise HTTPException(

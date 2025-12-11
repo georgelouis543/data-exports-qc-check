@@ -1,3 +1,5 @@
+from typing import Optional, Any
+
 from pydantic import BaseModel
 
 
@@ -6,4 +8,4 @@ class TaskStatusResponse(BaseModel):
     state: str
     progress: str | None = None
     error: str | None = None
-    result: dict | None = None
+    result: Optional[Any] = None

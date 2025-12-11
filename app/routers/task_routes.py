@@ -1,3 +1,5 @@
+from typing import Any, Coroutine
+
 from fastapi import APIRouter
 
 from app.controllers.task.get_task_status_controller import fetch_task_status
@@ -23,7 +25,7 @@ async def root() -> dict[str, str]:
 )
 async def get_task_status(
         task_id: str
-) -> TaskStatusResponse:
+) -> dict:
     """
     Get the status of a Celery task by its ID.
     """
