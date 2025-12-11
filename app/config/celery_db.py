@@ -12,7 +12,7 @@ DATABASE_URL = os.getenv('DB_PROD_URL')
 @contextmanager
 def get_sync_db():
     """
-    psycopg3 synchronous DB connection for Celery workers.
+    psycopg3 synchronous DB connection for Celery workers (Async should not be used).
     Always returns row dicts instead of tuples.
     """
     conn = psycopg.connect(

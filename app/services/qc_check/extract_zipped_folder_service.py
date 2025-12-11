@@ -31,6 +31,7 @@ def extract_feed_zip(
             logging.info(f"[{task_id}] Extracted {zip_file_path} into {extract_to}")
         else:
             logging.warning(f"[{task_id}] No Zip file found to extract")
+            raise FileNotFoundError("No Zip file found to extract")
 
         # Just copy non-zip files to the extracted folder
         for item in task_root.iterdir():
@@ -55,7 +56,7 @@ def extract_feed_zip(
             extracted_path = str(extract_to)
 
         # Extract date from filenames
-        date_regex = date_regex_for_filenames()
+        date_regex = date_regex_for_filenames("extract_zipped_folder")
         date_pattern = re.compile(date_regex)
         detected_date = None
 

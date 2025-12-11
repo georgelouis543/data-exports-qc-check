@@ -1,12 +1,10 @@
 import logging
-from pathlib import Path
 from typing import Any
 
 import httpx
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-FEED_FILES_DIR = BASE_DIR / "feed_files"
-FEED_FILES_DIR.mkdir(exist_ok=True)
+from app.config.file_paths import FEED_FILES_DIR
+
 
 def download_file_from_s3(
         download_data: list[dict[str, Any]],
