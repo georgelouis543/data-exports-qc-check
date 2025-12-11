@@ -1,4 +1,8 @@
 from app.config.celery_config import celery_app
+from app.services.qc_check.control_file_service import check_control_file_exists, read_filenames_from_control_file
+from app.services.qc_check.extract_zipped_folder_service import extract_feed_zip
+from app.services.qc_check.s3_download_service import download_file_from_s3
+from app.services.qc_check.verify_file_format_service import verify_file_format_using_metadata
 
 
 @celery_app.task(name="qc_tasks.run_check")
@@ -28,6 +32,43 @@ def metadata_validation_task(
     # Verify exclusions list for health plans
     # Verify the nomenclature data list
     # Verify restrictions list
+
+    # Get the Celery-generated task_id
+    task_id = metadata_validation_task.request.id
+    final_audit_log = []
+
+    downloaded_folder_path = download_file_from_s3(download_data, task_id)
+    extracted_folder_path = extract_feed_zip(task_id, downloaded_folder_path)
+
+    final_audit_log.append(
+        verify_file_format_using_metadata(
+            feed_id,
+            extracted_folder_path,
+            task_id
+        )
+    )
+
+    control_file_check = check_control_file_exists(extracted_folder_path, task_id)
+    final_audit_log.append(control_file_check)
+
+    if control_file_check["status"] != "PASSED":
+        final_audit_log.append(
+            read_filenames_from_control_file(
+                None,
+                False,
+                task_id
+            )
+        )
+    control_file_path = control_file_check.get("control_file_path")
+
+    final_audit_log.append(
+        read_filenames_from_control_file(
+            control_file_path,
+            True,
+            task_id
+        )
+    )
+
     return {
         "status": "completed",
         "feed_id": feed_id
