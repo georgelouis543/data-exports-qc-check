@@ -18,6 +18,7 @@ def check_control_file_exists(
     audit_step = {}
     try:
         if not os.path.exists(extracted_file_path):
+            logging.error(f"File {extracted_file_path} does not exist.")
             raise FileNotFoundError(f"[{task_id}] The specified path does not exist.")
 
         control_file = None
