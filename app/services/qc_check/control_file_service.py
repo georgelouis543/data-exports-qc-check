@@ -62,7 +62,6 @@ def check_control_file_exists(
 
 def read_filenames_from_control_file(
         control_file_path: str | None,
-        is_control_file_present: bool,
         task_id: str
 ) -> dict:
     """
@@ -71,12 +70,11 @@ def read_filenames_from_control_file(
     Args:
         control_file_path (str): The path to the control file.
         :param control_file_path:
-        :param is_control_file_present:
         :param task_id:
     """
     audit_step = {}
 
-    if not is_control_file_present:
+    if not control_file_path:
         logging.info(f"[{task_id}] Control file is not present. Skipping filename read.")
         audit_step['status'] = 'SKIPPED'
         audit_step['step_name'] = 'READ FILENAMES FROM CONTROL FILE'
