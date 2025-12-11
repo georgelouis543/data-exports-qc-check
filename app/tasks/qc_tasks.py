@@ -10,11 +10,11 @@ def metadata_validation_task(
         feed_id: int,
         download_data: list
 ) -> dict:
-    # Download the feed file from S3
-    # Extract the feed file[s]
-    # Verify the metadata (file format, file type, delimiter) against the predefined schema
-    # Check if control file present in extracted folder
-    # Read file names and rows count from control file
+    # Download the feed file from S3 [DONE]
+    # Extract the feed file[s] from the zipped folder [DONE]
+    # Verify the metadata (file format, file type, delimiter) against the predefined schema [DONE]
+    # Check if control file present in extracted folder [DONE]
+    # Read file names and rows count from control file [DONE]
     # Verify if all files listed in control file are present in extracted folder
     # Verify if all files in DB for the feed (with the respective id) are present in extracted folder
     # Validate data types for all files in DB for the feed (with the respective id)
